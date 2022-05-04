@@ -130,11 +130,57 @@ rankhospital <- function(state, outcome, num = "best") {
 rankall <- function(outcome, num = "best") {
   ## Read outcome data
   
+  data <- read.csv("outcome-of-care-measures.csv", 
+                      colClasses = "character",
+                      header = TRUE)
+  
+  rankings <- as.data.frame(cbind(data[, 2],   # hospital
+                                  data[, 7],   # state
+                                  data[, 11],  # heart attack
+                                  data[, 17],  # heart failure
+                                  data[, 23]), # pneumonia
+                         stringsAsFactors = FALSE)
+  
+  ## Rename columns
+  
+  colnames(rankings) <- c("hospital", "state", "heart attack", "heart failure", "pneumonia")  
   
   
   ## Check that state and outcome are valid
+  if (!outcome %in% cbind("heart attack", "heart failure", "pneumonia")){
+    stop("invalid outcome!")
+  }
+
+  
   ## For each state, find the hospital of the given rank
+  
+    #make numeric
+    rankings[,outcome] <- as.numeric(rankings[, outcome])
+    
+    #remove na
+    rankings <- rankings[!is.na(rankings[,outcome]), ]
+    
+    split_states <- split(rankings, rankings$state)
+    
+    ranks <- lapply(split_states, function(x, num){
+      x = x[order(x[,outcome], x$hospital),]
+      
+      if(class(num) == "character"){
+        if (num == "best"){
+          return (x$hospital[1])
+        }
+        else if (num == "worst"){
+          return (x$hospital[nrow(x)])
+        }
+      }
+      else {
+        return(x$hospital[num])
+      }
+    }, num)
+    
+  }
+  
+  
   ## Return a data frame with the hospital names and the
   ## (abbreviated) state name
-}
 
