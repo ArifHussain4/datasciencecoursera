@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ArcGIS Dashboards</title>
+    <meta name="description" content="ArcGIS Dashboards">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="">
+    <link rel="icon" href="assets/images/arcgis-dashboards-16-57c7bdca757e2544acb67f661775b0ba.png" type="image/png">
+    <link href="https://js.arcgis.com/4.23/esri/themes/dark/main.css" rel="stylesheet" type="text/css" data-theme="api-dark">
+    <link href="https://js.arcgis.com/4.23/esri/themes/light/main.css" rel="stylesheet" type="text/css" data-theme="api-light">
+    <link rel="stylesheet" href="assets/vendor-8996f37f1fe3366e0652d3983479a14c.css">
+    <link rel="stylesheet" href="assets/app-dark-95295239d82471c0b7c002473f21a4f9.css" data-theme="dark">
+    <link rel="stylesheet" href="assets/app-light-fae1b9d9c4fc35aac66bf1820f993e2a.css" data-theme="light">
+    <script src="assets/before-amd-d7e85cfa4eaf2f1b5f0f469d335a8376.js"></script>
+</head>
+
+<body>
+    <script src="https://js.arcgis.com/4.23/init.js" data-amd="true"></script>
+    <script src="assets/amd-loading-1bf6016d5bb87b31b9b6934e0129b3f5.js" data-amd-loading="true"></script>
+    <div id="initialLoadingContainer" class="loader-icon-container">
+        <calcite-loader scale="l" active=""></calcite-loader>
+    </div>
+</body>
+
+</html>

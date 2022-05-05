@@ -10,19 +10,135 @@ print("Let's do this!")
 ```
 
 ## Starting Week 1
+Components of tidy data:
+    - Raw data
+    - tidy data set
+    - Codebook describing each variable (metadata)
+    - Explicit and exact recipe you used to go from 1 > 2 > 3 (steps)
+    
 
-
+## Downloading Files (R)
+  - Need to know which directories to be working in: getwd() and setwd()
+  - Relative vs. absolute paths:
+      - Relative: setwd("./data") or setwd("../")
+      - Absolute: setwd("/Users/Arif/one)
+  - Windows need \\ not /
 
 ```{r cars}
-summary(cars)
+setwd("C:/Users/Arif/Documents/GitHub/datasciencecoursera/New")
+getwd()
+
+file.exists("C:/Users/Arif/Documents/GitHub/datasciencecoursera") #check if directory exists
+dir.create("C:/Users/Arif/Documents/GitHub/datasciencecoursera/New") #create a directory if none
+
+download.file() #for downloading file
 ```
 
-## Including Plots
+#Download File Example
+  - Important parameters: fileurl, destfile (directory), method
+  - Download baltimore camera data
+  - if URL starts with http or https (use "curl" method if on mac for this) should be ok
 
-You can also embed plots, for example:
 
-```{r pressure}
-plot(pressure)
+```{r data}
+fileurl <- "https://www.arcgis.com/apps/dashboards/4b64b6e8c0014b6998d767fcf077bfaf"
+download.file(fileurl, destfile = "./New/covid.csv")
+
+list.files("./New")
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+##Reading Local Flat Files
+  - header = true
+  - sep = "," for CSV (read.table())
+  - read.csv() puts header = TRUE automatically and sep = ","
+  - quote="" means no quotes in data
+  - na.strings: ser char that reps missing value
+  - nrows
+  - skip: number of lines skip before read
+
+``` {r flat file}
+covid_data <- read.csv("C:/Users/Arif/Documents/GitHub/datasciencecoursera/New/covid_data_cleaned.csv", header = TRUE)
+
+head(covid_data)
+
+summary(covid_data)
+
+```
+
+##Reading Excel
+  - use library(xlsx) package as it's useful
+     - can run: read.xlsx() and read.xlsx2()
+          - sheetindex=1
+  - reading specific rows or columns:
+     - read.xlsx(..., colIndex = colIndex, rowIndex = rowIndex)
+  - write.xlsx will write an excel file
+      - library(XLConnect) and library(XLConnect vignette) both useful for Excel use
+
+
+```{r Excel}
+#library(xlsx)
+
+colIndex <- 1:3
+rowIndex <- 1:4
+
+```
+
+
+##Readig XML
+  - Extensible markup language
+  - Components: 1) markup: label that gives structure to text, 2) actual text of document
+  
+  - Official tutorials: xml short and long
+  
+  
+##Reading JSON
+  - Java Script Object Notation
+  - common format for APIs
+  - Different syntax but similar to XML
+  - Use libarary(jsonlite)
+      - get file: fromJSON() function
+      - save: toJSON()
+  - json.org and wiki are good resources  
+      
+```{r JSON}
+library(jsonlite)
+
+iris2 <- toJSON(iris, pretty = TRUE) #taking dataset to JSON
+iris3 <- fromJSON (iris2) #back to dataframe
+head(iris2)
+head(iris3)
+```
+
+##Data.Table Package
+  - Inherits from data.frame
+  - Faster than data.frame as written in C
+  - Great for subsetting, grouping, updating
+      - by=x (group by x variable)
+  - New syntax
+  - tables() #shows all tables in data 
+
+  
+  
+```{r data.table}
+library(data.table)
+
+DF = data.frame(x=rnorm(9), y=rep(c("a", "b", "c"), each=3), z=rnorm(9))
+head(DF)
+
+DT = data.table(x=rnorm(9), y=rep(c("a", "b", "c"), each=3), z=rnorm(9))
+head(DT)
+
+DT[2,] #can subset same way
+DT[DT$y=="a"]
+DT[c(2,3)]
+DF[c(2,3)]
+
+DT[,list(mean(x), sum(z))]
+DT[,w:=z^2]
+
+DT[by=x]
+
+
+```
