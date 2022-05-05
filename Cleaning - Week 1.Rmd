@@ -31,7 +31,7 @@ getwd()
 file.exists("C:/Users/Arif/Documents/GitHub/datasciencecoursera") #check if directory exists
 dir.create("C:/Users/Arif/Documents/GitHub/datasciencecoursera/New") #create a directory if none
 
-download.file() #for downloading file
+#download.file() #for downloading file
 ```
 
 #Download File Example
