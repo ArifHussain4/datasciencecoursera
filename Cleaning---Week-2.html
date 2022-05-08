@@ -380,33 +380,65 @@ pre code {
 <li>can use readlines()</li>
 </ul>
 <p>You can also embed plots, for example:</p>
-<pre class="r"><code>data &lt;- url(&quot;https://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en&quot;) #opens conection
+<pre class="r"><code>data &lt;- url(&quot;https://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en&quot;) #opens 
 html_code &lt;- readLines(data)</code></pre>
 <pre><code>## Warning in readLines(data): incomplete final line found on &#39;https://
 ## scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en&#39;</code></pre>
-<pre class="r"><code>close(data) #closes connection
-#head(html_code)</code></pre>
+<pre class="r"><code>close(data) #closes connection</code></pre>
 <p>Can use the XML package to parse data from HTML code</p>
-<pre class="parsing"><code>library(XML)
-url &lt;- &quot;http://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;amp;hl=en&quot;
+<pre class="r"><code>library(XML)
+url &lt;- &quot;https://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;amp;hl=en&quot;
 html &lt;- htmlTreeParse(url)
 
-xpathSApply(html, &quot;//title&quot;, xmvalue)
+#xpathSApply(html, &quot;//title&quot;, xmlValue)
 
-xpathSApply(html, &quot;//td[@id=&#39;col-citedby&#39;]&quot;, xmvalue)</code></pre>
+#xpathSApply(html, &quot;//td[@id=&#39;col-citedby&#39;]&quot;, xmlValue)</code></pre>
 </div>
 <div id="reading-from-get-command-httr-package" class="section level2">
 <h2>Reading from get command (httr package)</h2>
 <ul>
 <li>library(httr)</li>
 </ul>
-<pre class="httr"><code>library(httr)
-html2 = GET(&quot;http://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;amp;hl=en&quot;)
-content2 = content(html2, as=&quot;text&quot;)
-</code></pre>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the
-code chunk to prevent printing of the R code that generated the
-plot.</p>
+<pre class="r"><code>library(httr)
+html2 &lt;- GET(&quot;http://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;amp;hl=en&quot;) #open connection
+content2 &lt;- content(html2, as=&quot;text&quot;) #get content
+parsedHTML &lt;- htmlParse(content2, asText = TRUE) #parse to HTML
+xpathSApply(parsedHTML, &quot;//title&quot;, xmlValue) #run loop</code></pre>
+<pre><code>## [1] &quot;Jeff Leek - Google Scholar&quot;</code></pre>
+<p>##Accessing pages with passwords - won’t work with just GET() from
+httr package - can authenticate using httr package: assign the handle
+and authenticate() command</p>
+</div>
+<div id="getting-data-from-api" class="section level2">
+<h2>Getting Data from API</h2>
+<ul>
+<li>Can get these with GET requests (httr package)</li>
+<li>GET; POST, PUT, DELETE –&gt; functions</li>
+<li>Works well with FB, Twitter, GOogle, etc.</li>
+</ul>
+</div>
+<div id="other-sources" class="section level2">
+<h2>Other Sources</h2>
+<ul>
+<li><p>can use:</p>
+<ul>
+<li>file()</li>
+<li>url()</li>
+<li>gzfile() #zip file</li>
+<li>bzfile () #zip file</li>
+</ul></li>
+<li><p>run ?connection for more info</p></li>
+<li><p>foreign package very useful –&gt; read.foo. Can load from:</p>
+<ul>
+<li>minitab, S, SAS, SPSS, MATLAB</li>
+<li>read.spss</li>
+<li>read.dta</li>
+<li>read.mtp</li>
+<li>read.octave</li>
+<li>read.spss</li>
+<li>read.SAS</li>
+</ul></li>
+</ul>
 </div>
 
 

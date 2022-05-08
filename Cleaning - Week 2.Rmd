@@ -16,10 +16,9 @@ date: '2022-05-06'
 You can also embed plots, for example:
 
 ```{r web scrape} 
-data <- url("https://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en") #opens conection
+data <- url("https://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en") #opens 
 html_code <- readLines(data)
 close(data) #closes connection
-#head(html_code)
 ```
 Can use the XML package to parse data from HTML code
 ```{r}
@@ -27,9 +26,9 @@ library(XML)
 url <- "https://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en"
 html <- htmlTreeParse(url)
 
-xpathSApply(html, "//title", xmlValue)
+#xpathSApply(html, "//title", xmlValue)
 
-xpathSApply(html, "//td[@id='col-citedby']", xmlValue)
+#xpathSApply(html, "//td[@id='col-citedby']", xmlValue)
 ```
 ## Reading from get command (httr package)
 - library(httr)
