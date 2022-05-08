@@ -22,24 +22,52 @@ close(data) #closes connection
 #head(html_code)
 ```
 Can use the XML package to parse data from HTML code
-```{parsing}
+```{r}
 library(XML)
-url <- "http://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en"
+url <- "https://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en"
 html <- htmlTreeParse(url)
 
-xpathSApply(html, "//title", xmvalue)
+xpathSApply(html, "//title", xmlValue)
 
-xpathSApply(html, "//td[@id='col-citedby']", xmvalue)
+xpathSApply(html, "//td[@id='col-citedby']", xmlValue)
 ```
 ## Reading from get command (httr package)
 - library(httr)
 
-``` {httr}
+``` {r}
 library(httr)
-html2 = GET("http://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en")
-content2 = content(html2, as="text")
-
+html2 <- GET("http://scholar.google.com/citations?user=HI-I6C0AAAAJ&amp;hl=en") #open connection
+content2 <- content(html2, as="text") #get content
+parsedHTML <- htmlParse(content2, asText = TRUE) #parse to HTML
+xpathSApply(parsedHTML, "//title", xmlValue) #run loop
 ```
+##Accessing pages with passwords
+- won't work with just GET() from httr package
+- can authenticate using httr package: assign the handle and authenticate() command
 
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Getting Data from API 
+- Can get these with GET requests (httr package)
+- GET; POST, PUT, DELETE --> functions
+- Works well with FB, Twitter, GOogle, etc.
+
+## Other Sources
+- can use:
+    - file()
+    - url()
+    - gzfile() #zip file
+    - bzfile () #zip file
+- run ?connection for more info
+
+- foreign package very useful --> read.foo. Can load from:
+    - minitab, S, SAS, SPSS, MATLAB
+    - read.spss
+    - read.dta
+    - read.mtp
+    - read.octave
+    - read.spss
+    - read.SAS
+
+
+
+
