@@ -78,7 +78,7 @@ summary(covid_data)
 
 
 ```{r Excel}
-#library(xlsx)
+library(xlsx)
 
 colIndex <- 1:3
 rowIndex <- 1:4
@@ -103,6 +103,9 @@ rowIndex <- 1:4
   - json.org and wiki are good resources  
       
 ```{r JSON}
+library(xml2)
+#read_xml()
+
 library(jsonlite)
 
 iris2 <- toJSON(iris, pretty = TRUE) #taking dataset to JSON
