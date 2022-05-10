@@ -1,0 +1,179 @@
+---
+title: "Cleaning - Week 3"
+author: "Syed Arif Hussain"
+date: '2022-05-09'
+output: html_document
+---
+
+## Subsetting
+
+- Subset a column: X[,1]
+- Subset by column: X[, "varname"]
+
+- Subset by row and column: X[1:2, "varname]
+
+- Subset using logic:
+    - X[(X$var1 <= 3 & X$var2 > 11), ] --> gives only data on the rows that fulfill this statement
+    - X[(X$var1 <= 3 | X$var2 >15), ] --> or
+
+Dealing with NA values
+- Subsetting on NA does not produce the row --> use which command
+    - Returns indices 
+    - e.g., X[which(X$var2 > 8),] --> returns indices in which var2 > 8
+        - Does not return the NA
+
+```{r }
+
+```
+
+## Sorting Variables
+- Sort using sort() command
+- sort(x$var1) --> in increasing order; 
+- decreasing order --> sort(, decreasing=TRUE)
+- dealing with NA --> sort(,na.last = TRUE)
+
+Order df by a variable
+- x[order(X$var1), ] --> will order the values by variable 1 in increasing order
+    - this is reodering the rows which is why we are passing it through row index 
+
+- Can order by multiple variables:
+  - x[order(x$var1, x$var2), ]
+  - Sorts first variable first and then second within first
+
+```{r}
+```
+
+#Sorting in plyr package
+- use the arrange command --> arrange(dataframe, var1) --> sorts df on variable 1
+    - same as order
+- arrange(dataframe, desc(var1)) --> decreasing order
+
+#Adding rows and columns to df
+- x$var4 <- rnowm(5) --> var4 is a variable not in df; we assigned rnorm(5) to it which adds it
+
+- Can also add with cbind:
+    - Y <- cbind(dataframe, norm(5)) --> adds a column bind to dataframe on right side
+    - Y <- cbind(norm(5),dataframe) adds a column bind to dataframe on left side
+
+- binding rows --> use rbind instead of cbind
+
+##Summarizing Data
+- head(dataset, n=3)
+- tail(dataset, n=1)
+- summary(dataset)
+- str(dataset) --> tells class of variable also 
+
+- quantile(dataframe$columnname, no.rm=TRUE)
+    - can pass through probability too --> quantile(xx$column, probs=c(0.5, 0.75, 0.9))
+          - can look at different percentiles through this
+
+```{r}
+head(iris, n=3)
+
+tail(iris, n=2)
+
+summary(iris)
+
+str(iris)
+
+quantile(iris$Petal.Width, na.rm=TRUE)
+quantile(iris$Petal.Width, probs=c(0.5, 0.75, 0.9))
+quantile(iris$Petal.Width, probs=c(0.3, 0.75, 0.99))
+
+```
+#Summary Continues
+- Can create a table --> table(df$column, useNA="ifany")
+    - adds an additional column if any NAs
+- default function does NOT tell us about NA
+
+- 2D table --> pass two variables
+    - table(df$col1, df$col2)
+    
+```{r}
+table(iris$Sepal.Length, useNA = "ifany")
+table(iris$Sepal.Length, iris$Sepal.Width) #sence of relationship between diff variables
+```
+#Check for missing values
+- SUM is.na --> sum(is.na(df$column))
+      - if 0 --> no NA
+      
+- ANY is.na --> any(is.na(df$column))
+      - if any NA --> true
+      
+- ALL is.na --> all(is.na(df$column))
+    - can also use for other conditions
+
+```{r}
+sum(is.na(iris$Sepal.Length))
+any(is.na(iris$Sepal.Length))
+
+all(iris$Sepal.Length > 1) # check to see if all have value of >1 
+```
+#Taking Sums
+- Across columns or rows
+    - colSums() --> can use with is.na to see check columns for missing values
+    - rowSums() --> can use with all
+
+```{r}
+colSums(is.na(iris))
+all(colSums(is.na(iris))==0) #all columns do not contain NA
+
+```
+#Finding specific details
+- Finding everything equal to something:
+    - table(df$column %in% c("xyz", "abc", "etc"))
+        - similar to WHERE IN --> SQL
+    - can also see the == command if don't want to check multiple items
+
+```{r}
+table(iris$Sepal.Length %in% c("1.2", "1.3", "5.1")) #how many fall in this list
+```
+#Subset data set using logic above
+- use logic in subset
+    - x[x$col %in% c("1", "2"), ] --> checking all rows 
+
+```{r}
+iris[iris$Sepal.Length %in% c("5.1", "5,2"),] #gets all rows with length of 5.1 or 5.2
+```
+#Summary Cross Tab
+- summary(DF) 
+- create DF using as.data.frame()
+
+- Cross tab
+    - use xtabs(...)
+    - xt <- xtabs(Y ~ X1 + X2, data=DF)
+        - Y is the value appearing in the tables; X1 and X2 are on the col/row labels
+
+```{r}
+data("UCBAdmissions")
+DF <- as.data.frame(UCBAdmissions)
+summary(DF)
+
+xt <- xtabs(Freq ~ Gender + Admit, data=DF) #freq of each gender admitted
+xt
+```
+
+#Flat Tables
+- Cross tabs for larger variables
+    - use xtabs --> can break down by . --> all
+        - xtabs(Y ~., data=DF)
+
+- If all lot of combos, there will be multipl tables. Can use ftable() to summarize easier
+
+```{r}
+warpbreaks$replicate <- rep(1:9, len = 54)
+xt <- xtabs(breaks ~., data=warpbreaks)
+#xt
+
+ftable(xt)
+
+```
+
+#Data Set Siz
+- object.size()
+- print(object.size(data), units = "Mb) --> listing units
+
+```{r}
+object.size(iris)
+print(object.size(iris), units ="Kb")
+```
