@@ -660,6 +660,116 @@ ftable(xt)</code></pre>
 <pre><code>## 7256 bytes</code></pre>
 <pre class="r"><code>print(object.size(iris), units =&quot;Kb&quot;)</code></pre>
 <pre><code>## 7.1 Kb</code></pre>
+<p>##Creating new Variabels - May need to transform data to get work
+done - Common variables: missingness indicators, cutting up quant
+variables, applying transforms</p>
+<p>#creating sequences - Used to index ops –&gt; seq - seq(1, 10, by=2)
+–&gt; min value and max value, by –&gt; how many values to generate -
+seq(1, 10, length=3) –&gt; starts at 1 and ends at 10, creates 3 values
+- x &lt;- c(1,3,8,25,100); seq(along=x) –&gt; loops over 5 values</p>
+<pre class="r"><code>seq(1, 10, by=2)</code></pre>
+<pre><code>## [1] 1 3 5 7 9</code></pre>
+<pre class="r"><code>seq(1, 10, length=3)</code></pre>
+<pre><code>## [1]  1.0  5.5 10.0</code></pre>
+<p>#Create binary variables - set condition –&gt; is speed less than
+5?</p>
+<pre class="r"><code>cars$slow = ifelse(cars$speed &lt; 5, TRUE, FALSE)
+table(cars$slow, cars$speed)</code></pre>
+<pre><code>##        
+##         4 7 8 9 10 11 12 13 14 15 16 17 18 19 20 22 23 24 25
+##   FALSE 0 2 1 1  3  2  4  4  4  3  2  3  4  3  5  1  1  4  1
+##   TRUE  2 0 0 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0</code></pre>
+<pre class="r"><code>table(cars$slow, cars$speed &lt; 5)</code></pre>
+<pre><code>##        
+##         FALSE TRUE
+##   FALSE    48    0
+##   TRUE      0    2</code></pre>
+<p>#Making categorical vairables out of quant variables - break into
+consecutive numbers - use cut to break value - cut(column, by what you
+want to cut)</p>
+<ul>
+<li>Can also use library(Hmisc)
+<ul>
+<li>use cut2 function –&gt; can specificy with more details
+<ul>
+<li>cut2(column, how many groups you want to cut)</li>
+<li>don’t need to set breaks in advance</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre class="r"><code>cars$groups = cut(cars$speed, breaks = quantile(cars$speed)) #breaks it up into quantiles
+table(cars$groups)</code></pre>
+<pre><code>## 
+##  (4,12] (12,15] (15,19] (19,25] 
+##      13      11      12      12</code></pre>
+<pre class="r"><code>table(cars$groups, cars$speed)</code></pre>
+<pre><code>##          
+##           4 7 8 9 10 11 12 13 14 15 16 17 18 19 20 22 23 24 25
+##   (4,12]  0 2 1 1  3  2  4  0  0  0  0  0  0  0  0  0  0  0  0
+##   (12,15] 0 0 0 0  0  0  0  4  4  3  0  0  0  0  0  0  0  0  0
+##   (15,19] 0 0 0 0  0  0  0  0  0  0  2  3  4  3  0  0  0  0  0
+##   (19,25] 0 0 0 0  0  0  0  0  0  0  0  0  0  0  5  1  1  4  1</code></pre>
+<pre class="r"><code>library(Hmisc)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre><code>## Loading required package: Formula</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Hmisc&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     format.pval, units</code></pre>
+<pre class="r"><code>cars$groups2 = cut2(cars$speed, g=4)
+table(cars$groups2)</code></pre>
+<pre><code>## 
+## [ 4,13) [13,16) [16,20) [20,25] 
+##      15      11      12      12</code></pre>
+<p>#Factor variables - use factor() command; takes input of int
+variable</p>
+<ul>
+<li>can set levels too
+<ul>
+<li>levels = …</li>
+</ul></li>
+<li>as.numeric –&gt; bring it back to numeric after making it a
+factor</li>
+</ul>
+<pre class="r"><code>cars$factor &lt;- factor(cars$speed)
+cars$factor[1:10]</code></pre>
+<pre><code>##  [1] 4  4  7  7  8  9  10 10 10 11
+## Levels: 4 7 8 9 10 11 12 13 14 15 16 17 18 19 20 22 23 24 25</code></pre>
+<pre class="r"><code>yesno &lt;- sample(c(&quot;yes&quot;, &quot;no&quot;), size=10, replace=TRUE)
+yesnofac &lt;- factor(yesno, levels=c(&quot;yes&quot;, &quot;no&quot;)) #yes as lowest value
+relevel(yesnofac, ref=&quot;yes&quot;) #relevel the variable to make reference class to yes</code></pre>
+<pre><code>##  [1] yes no  yes yes no  yes yes no  yes no 
+## Levels: yes no</code></pre>
+<pre class="r"><code>as.numeric(yesnofac) #can change factor back to numeric</code></pre>
+<pre><code>##  [1] 1 2 1 1 2 1 1 2 1 2</code></pre>
+<p>Note that cutting produces factor variables</p>
+<p>#Mutate functions - part of plyr package (library(plyr)) - Used to
+create a new version of a variable and simultaneously add to dataset</p>
+<pre class="r"><code>library(Hmisc); library(plyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:Hmisc&#39;:
+## 
+##     is.discrete, summarize</code></pre>
+<pre class="r"><code>carsdata2 = mutate(cars, speedgroups = cut2(cars$speed, g=4)) #apply to old df, add new variable speedgroups
+table(carsdata2$speedgroups) #new df is old df + new variables added</code></pre>
+<pre><code>## 
+## [ 4,13) [13,16) [16,20) [20,25] 
+##      15      11      12      12</code></pre>
+<pre class="r"><code>head(carsdata2) #added new column for groups</code></pre>
+<pre><code>##   speed dist  slow groups groups2 factor speedgroups
+## 1     4    2  TRUE   &lt;NA&gt; [ 4,13)      4     [ 4,13)
+## 2     4   10  TRUE   &lt;NA&gt; [ 4,13)      4     [ 4,13)
+## 3     7    4 FALSE (4,12] [ 4,13)      7     [ 4,13)
+## 4     7   22 FALSE (4,12] [ 4,13)      7     [ 4,13)
+## 5     8   16 FALSE (4,12] [ 4,13)      8     [ 4,13)
+## 6     9   10 FALSE (4,12] [ 4,13)      9     [ 4,13)</code></pre>
+<p>#Common transforms - abs(x) - sqrt(x) - ceiling(x) –&gt; 3.5 to 4 -
+floor(x) –&gt; 3.5 to 3 - round(x, digits=n) - signif(x, digits=n) -
+cos(x); sin(x) - log(x) - log2(x) log10(x) - exp(x)</p>
 </div>
 
 
