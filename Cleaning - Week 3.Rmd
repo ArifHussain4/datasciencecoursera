@@ -265,3 +265,72 @@ head(carsdata2) #added new column for groups
 - log(x)
 - log2(x) log10(x)
 - exp(x)
+
+
+##Reshaping Data
+- Use library(reshape2) 
+    - melt data set --> pass df to a melt function, tell it which are id variables and which are measure
+    - creates a bunch of id values
+
+
+```{r}
+library(reshape2)
+mtcars$carname <- rownames(mtcars)
+carMelt <- melt(mtcars, id=c("carname", "gear", "cyl"), measure.vars=c("mpg", "hp"))
+head(carMelt, n=3)
+tail(carMelt, n=3)
+```
+#Casting data frames
+- dcast --> recast the data set into a particular shape/df
+
+
+```{r}
+cylData <- dcast(carMelt, cyl ~ variable) #cyl row, variable columns
+cylData #summarizes data by count
+
+cylData2 <- dcast(carMelt, cyl ~ variable, mean)
+cylData2 #summarizes data by mean
+
+```
+#Average Values within a Factor
+
+
+```{r}
+head(InsectSprays)
+
+tapply(InsectSprays$count, InsectSprays$spray, sum) #apply count along index spray, sum
+      #within each value of spray it sums the count
+
+spIns <- split(InsectSprays$count, InsectSprays$spray) #this splits by spray (group by)
+    #will give a list
+spIns
+
+sprCount <- lapply(spIns, sum) #apply a function to the list values; same as above
+sprCount #gives a list
+
+unlist(sprCount) #unlist the list; brings back to vector
+
+sapply(spIns, sum) #does the lapply and unlist in one step
+```
+
+#plyr package good interface to do above in one step
+
+```{r}
+ddply(InsectSprays,.(spray), summarize, sum=sum(count))
+      #pass dataset through ddply function
+      #.(variables we want summarized)
+      #summarize the variable, how? sum=sum(count) --> sum up the count within the variable
+
+spraySums <- ddply(InsectSprays, .(spray), summarize, sum=ave(count,FUN=sum))
+    #ave function --> gives same dimension as dataset, can now add to dataset and run analyses
+dim(spraySums) 
+
+head(spraySums)
+```
+
+##Dplyr package --> dataframes
+- arrange()
+- filter()
+- select()
+- mutate()
+- rename()
