@@ -329,8 +329,74 @@ head(spraySums)
 ```
 
 ##Dplyr package --> dataframes
-- arrange()
-- filter()
-- select()
-- mutate()
-- rename()
+- arrange() ---> reorder rows
+- filter() ---> extract subset of rows based on logical conditions
+- select() ---> return subset of columns of df
+- mutate() ---> add new variables/columns or transform existing variables
+- rename() ---> rename variable
+- summarize() ---> summary stats
+
+- Optimized version of plyr package; very fast
+
+- don't need to use $ after referencing the column name
+- result is a new df
+
+```{r}
+library(dplyr)
+cars_dplyr <- mtcars
+dim(cars_dplyr)
+
+names(cars_dplyr)
+head(select(cars_dplyr, mpg:drat))
+head(select(cars_dplyr, -(mpg:drat)))
+
+#regular R:
+i <- match("mpg", names(cars_dplyr))
+j <- match("drat", names(cars_dplyr))
+
+head(cars_dplyr[,-(i:j)])
+
+
+#Filter
+car.dpfilter <- filter(cars_dplyr, mpg > 21)
+car.dpfilter
+
+car.dpfilter2 <- filter(cars_dplyr, mpg > 21, cyl == 6)
+car.dpfilter2
+
+
+#arrange (asc/desc)
+car.dparrange <- arrange(cars_dplyr, mpg)
+head(car.dparrange)
+tail(car.dparrange)
+
+car.dparrange2 <- arrange(cars_dplyr, desc(mpg))
+head(car.dparrange2)
+tail(car.dparrange2)
+
+
+#rename
+car.rename <- rename(cars_dplyr, display = disp)
+head(car.rename)
+
+
+#mutate
+cars.mutate <- mutate(cars_dplyr, mpg_hp = mpg*hp/100) #create a new variable
+head(cars.mutate)
+
+
+#groupby --> split DF according to parameters
+cars.groupby <- group_by(cars_dplyr, cyl)
+cars.groupby
+summarize(cars.groupby, mean_mpg = mean(mpg, na.rm=TRUE), max_hp = max(hp, na.rm = TRUE))
+
+#use mutate to create year variable
+## --> mutate(xyz, year=as.POSIClt(date)$year + 1900)
+## then can group by etc..
+
+##month variable --> x %>% mutate(month = as.POSIXlt(date)$month + 1) %>% summarize(...)
+    #using pipeline operator
+
+```
+
+
