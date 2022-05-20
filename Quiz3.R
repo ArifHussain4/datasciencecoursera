@@ -9,6 +9,7 @@ housing_data_q3 <- read.csv("./quiz3/housing.csv")
 head(housing_data_q3)
 
 library(dplyr)
+library(data.table)
     # > 10 acrs --> ACR == 3
     #sold more than 10k agrilculte --> AGS == 6
 
@@ -40,4 +41,8 @@ education_data_df <- as.data.frame(education_data)
 
 names(gdp_data_df) #X
 names(education_data_df) #CountryCode
+
+merged_countries <- merge(gdp_data_df, education_data_df, by.x = "X", by.y = "CountryCode")
+arrange(merged_countries, desc(X.3))
+
 
