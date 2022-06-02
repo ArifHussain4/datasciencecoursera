@@ -1,0 +1,44 @@
+---
+title: "Data Exploration - Week 1"
+author: "Syed Arif Hussain"
+date: '2022-06-02'
+output: html_document
+---
+Determining column classes --> read.csv("...", colClasses c("numeric", "character", "factor"))
+
+#1 dimension summary
+1) five-number summary --> summary(df$column)
+2) boxplot --> boxplot(df$column, col = "blue")
+    - shows median, upper limit and lower limit
+3) histogram --> hist(df$1, col = "green)
+    --> putting a rug under it, rug(df$1)
+    --> breaks --> number of bars; hist(x, breaks = 100)
+    --> abline --> horizontal line at a certain level;  abline(h = 12)
+    --> vertical line in a histogram abline(v = 12, )
+4) barplow(table(df$x), col = "column name", main = "y axis")
+
+
+
+```{r}
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
