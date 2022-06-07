@@ -15,7 +15,7 @@ Determining column classes --> read.csv("...", colClasses c("numeric", "characte
     --> breaks --> number of bars; hist(x, breaks = 100)
     --> abline --> horizontal line at a certain level;  abline(h = 12)
     --> vertical line in a histogram abline(v = 12, )
-4) barplow(table(df$x), col = "column name", main = "y axis")
+4) barplot(table(df$x), col = "column name", main = "y axis")
 
 
 
